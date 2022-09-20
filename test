@@ -8,3 +8,6 @@ spec:
       image: kemmyro2
       ports:
         - containerPort: 8080
+app:
+  image:
+    name: 392937473097.dkr.ecr.us-east-2.amazonaws.com/app:staging-main-dc43dcc-1663644065
