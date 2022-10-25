@@ -10,4 +10,4 @@ spec:
         - containerPort: 8080
 app:
   image:
-    name: 392937473097.dkr.ecr.us-east-2.amazonaws.com/app:staging-main-4fb9658-1666722307
+    name: 392937473097.dkr.ecr.us-east-2.amazonaws.com/app:staging-main-90866b3-1666722378
