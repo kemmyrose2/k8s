@@ -23,6 +23,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - name: sleep 300
+        run: sleep 300
       
       - name: HEAD_REF
         run: echo "${{ github.workflow }}-${{ github.ref }}"
