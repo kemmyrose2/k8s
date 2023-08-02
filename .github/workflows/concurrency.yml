@@ -1,0 +1,88 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  workflow_call:
+
+  # Allows you to run this workflow manually from the Actions tab
+
+concurrency:
+  group: reviewapp-${{ github.event.number }}
+  
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      - name: HEAD_REF
+        run: echo "${{ github.workflow }}-${{ github.ref }}"
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        id: test
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+          
+      - name: echo exitcode
+        run: |
+          echo ${{ steps.test.outputs.exitcode }}
+             
+      - name: send notification to slack
+        if:  ${{ success() }}
+        run: |
+          echo hello, world
+          echo this works!
+          
+      - name: Checkout pull request HEAD
+        id: checkout_pr_head
+        uses: actions/checkout@v2
+        with:
+           ref: ${{ github.event.pull_request.head.sha }}
+           fetch-depth: 0
+           
+      - name: print-diff
+        shell: bash
+        run: |
+          git fetch origin main
+          git diff origin/main..HEAD > mydiff
+          echo "mydiff = "
+          cat mydiff
+          
+#       - name: Run a multi-line script
+#         id: text
+#         shell: bash
+#         run: |
+#           heroku releases --app ekemini --json -n 1 | grep "suceeded"
+          
+      - name: send notification to slack
+        if: failure()
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          channel-id: 'C02GBRSK8P7'
+          slack-message: 'I love you with commit: ${{github.sha7}}!!!'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        
+        
+          
+        
+          
+      
+
+     
+      
