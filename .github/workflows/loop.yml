@@ -21,5 +21,5 @@ jobs:
           for page in $(seq 1 $total_pages); do
             curl -s -u "${user}:${password}"\
               "https://api.github.com/orgs/${org}/repos?page=${page}&per_page=${per_page}" | \
-              jq -r '.[].clone_url'
+              jq -r '.[]|.clone_url'
           done
