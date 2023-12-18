@@ -1,0 +1,25 @@
+name: Manual Drift Detection
+on:
+  workflow_dispatch
+
+jobs: 
+  try:
+    name: try
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Get Job Run URL
+        shell: bash
+        run: |-
+          user="kemmyrose2"
+          password="Bellarose2016!"
+          org="kemmyrose2"
+          public_repos=$(curl -s -u "${user}:${password}" "https://api.github.com/orgs/${org}" | jq .public_repos)
+          per_page=100
+          total_pages=$(($public_repos / $per_page + 1))
+      
+          for page in $(seq 1 $total_pages); do
+            curl -s -u "${user}:${password}"\
+              "https://api.github.com/orgs/${org}/repos?page=${page}&per_page=${per_page}" | \
+              jq -r '.[].clone_url'
+          done
